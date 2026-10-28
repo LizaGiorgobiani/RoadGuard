@@ -14,9 +14,7 @@ DATASET_YAML = (
 
 BASE_MODEL = (
     PROJECT_ROOT
-    / "runs"
-    / "roadguard_experiment_2"
-    / "weights"
+    / "models"
     / "best.pt"
 )
 

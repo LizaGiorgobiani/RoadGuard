@@ -13,10 +13,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 MODEL_PATH = (
     PROJECT_ROOT
-    / "runs"
-    / "roadguard_experiment_2"
-    / "weights"
+    / "models"
     / "best.pt"
+
 )
 
 
