@@ -10,11 +10,7 @@ data/processed/*
 data/samples/*
 
 # Model weights and training outputs
-*.pt
 runs/
-!runs/roadguard_experiment_2/
-!runs/roadguard_experiment_2/weights/
-!runs/roadguard_experiment_2/weights/best.pt
 
 # Secrets and local configuration
 .env
