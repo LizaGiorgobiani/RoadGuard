@@ -15,7 +15,29 @@ The system detects 10 road-scene object classes:
 - traffic light
 - traffic sign
 
-The project includes dataset inspection and preparation, annotation validation, model training, multiple experiments, model evaluation, visualization, and a Streamlit-based demonstration application.
+The project includes dataset inspection and preparation, annotation validation, model training, multiple experiments, model evaluation, object-size analysis, visualization, and a Streamlit-based demonstration application.
+
+---
+
+## 📄 Final Report
+
+The complete project report is available here:
+
+**[RoadGuard Final Report](reports/RoadGuard_Final_Report.md)**
+
+The final report contains the project's:
+
+- Dataset preparation and analysis
+- Data validation
+- Model architecture and training methodology
+- Experimental configurations
+- Model evaluation
+- Performance comparison
+- Confusion matrix analysis
+- Object-size analysis
+- Optimization experiments
+- Limitations
+- Conclusions and future improvements
 
 ---
 
@@ -39,7 +61,7 @@ RoadGuard/
 │           └── data.yaml
 │
 ├── models/
-│   └── roadguard_best.pt
+│   └── best.pt
 │
 ├── runs/
 │   ├── roadguard_cpu_baseline/
@@ -67,7 +89,8 @@ RoadGuard/
 │
 ├── reports/
 │   ├── metrics/
-│   └── figures/
+│   ├── figures/
+│   └── RoadGuard_Final_Report.md
 │
 ├── .gitignore
 ├── README.md
@@ -89,7 +112,7 @@ RoadGuard follows a complete Computer Vision development workflow:
 7. Model evaluation
 8. Error and object-size analysis
 9. Model optimization experiments
-10. Practical application through a web-based demo
+10. Practical application through a web-based demonstration
 
 The project was developed using CPU-only hardware, so a lightweight YOLO model and CPU-friendly training configuration were used.
 
@@ -132,22 +155,6 @@ The project uses the following 10 classes:
 7  train
 8  traffic light
 9  traffic sign
-```
-
-The class names are defined in `data.yaml`:
-
-```yaml
-names:
-  - person
-  - rider
-  - bike
-  - motor
-  - car
-  - truck
-  - bus
-  - train
-  - traffic light
-  - traffic sign
 ```
 
 ---
@@ -263,26 +270,17 @@ RoadGuard uses **YOLO26n**, a lightweight object detection model from Ultralytic
 
 The nano-sized model was selected because the project was trained using CPU-only hardware.
 
-The final model contains approximately:
-
-```text
-Parameters: 2,391,922
-GFLOPs:     5.4
-```
-
-The pretrained model used during development is located in:
-
-```text
-scripts/yolo26n.pt
-```
-
-The final trained RoadGuard model is stored separately in:
+The final trained model is stored in:
 
 ```text
 models/best.pt
 ```
 
-The final model is the model used by the evaluation and demonstration components.
+The pretrained YOLO26n model used during development is located in:
+
+```text
+scripts/yolo26n.pt
+```
 
 ---
 
@@ -310,7 +308,7 @@ The initial baseline was trained for 5 epochs. The model was subsequently traine
 
 The training process was interrupted once because the computer was restarted. Training was resumed from the saved checkpoint rather than starting the experiment from the beginning.
 
-The final experiment reached a total of 50 training epochs.
+The completed long training run reached a total of **50 training epochs**.
 
 ---
 
@@ -333,32 +331,45 @@ runs/
 └── roadguard_evaluation/
 ```
 
-Each experiment directory contains the corresponding training outputs and model weights generated during that experiment.
-
-The final model intended for practical use is copied to:
+The final trained model intended for practical use is:
 
 ```text
 models/best.pt
 ```
 
-This keeps the final model separate from the experimental training outputs.
-
 ---
 
 ## 10. Experiments
 
-Multiple experiments were performed to compare different training configurations and investigate whether model performance could be improved.
+Multiple training configurations were evaluated to determine whether model performance could be improved.
 
-The experiment scripts are:
+The experiment scripts include:
 
 ```text
-scripts/experiment_4.py
 scripts/experiment_improvement.py
+scripts/experiment_4.py
 ```
 
-The detailed experiment results and comparisons are documented separately in the project report.
+The experiments were evaluated using the same validation dataset and compared using Precision, Recall, mAP50, and mAP50-95.
 
-The purpose of the experiments was to evaluate different approaches and select the model with the strongest validation performance rather than automatically selecting the latest experiment.
+### Experiment Results
+
+| Experiment | Precision | Recall | mAP50 | mAP50-95 |
+|---|---:|---:|---:|---:|
+| Baseline | 0.5447 | 0.1966 | 0.1963 | 0.1075 |
+| Experiment 2 | 0.5364 | 0.2539 | **0.2596** | **0.1370** |
+| Experiment 3 | 0.5386 | 0.2622 | 0.2576 | 0.1353 |
+| Experiment 4 | 0.5057 | **0.2669** | 0.2556 | 0.1330 |
+
+Experiment 2 achieved the highest overall mAP50 and mAP50-95 and was therefore selected as the strongest overall experiment.
+
+Experiment 4 achieved the highest Recall, but its Precision and overall mAP were lower.
+
+Detailed numerical results are stored in:
+
+```text
+reports/metrics/
+```
 
 ---
 
@@ -380,11 +391,9 @@ The analysis calculates:
 - Percentage of medium objects
 - Percentage of large objects
 
-The results showed that many objects in the dataset occupy relatively small regions of the image.
+The analysis showed that many objects in the dataset occupy relatively small regions of the image.
 
 This is particularly relevant for road-scene objects such as traffic lights and traffic signs, which can be difficult to detect when they occupy only a small portion of an image.
-
-The analysis was used to help interpret the model's class-level performance.
 
 ---
 
@@ -447,7 +456,7 @@ The selected final model was evaluated on the 1,000-image validation dataset.
 | rider | 0.2383 |
 | bike | 0.1313 |
 | motor | 0.1701 |
-| car | 0.5810 |
+| car | **0.5810** |
 | truck | 0.3518 |
 | bus | 0.2988 |
 | train | 0.0000 |
@@ -466,17 +475,11 @@ The `train` class contains only one validation instance, so its 0.0000 mAP50 sho
 
 A normalized confusion matrix was generated during model evaluation.
 
-The confusion matrix is used to analyze prediction errors between the different object categories and the background class.
+The confusion matrix was used to analyze prediction errors between the different object categories and the background class.
 
 The analysis showed that some classes are more difficult to distinguish than others, with traffic lights and traffic signs remaining challenging.
 
-The evaluation visualizations are stored in:
-
-```text
-runs/roadguard_evaluation/
-```
-
-Selected figures for the project report are stored in:
+Selected evaluation figures are stored in:
 
 ```text
 reports/figures/
@@ -497,6 +500,15 @@ The goal was to determine whether changes to the training configuration could im
 
 The experiments showed that extending training beyond the initial baseline improved the model, while the later configurations did not produce a further improvement in the overall mAP metrics.
 
+The comparison was:
+
+| Experiment | mAP50 | mAP50-95 |
+|---|---:|---:|
+| Baseline | 0.1963 | 0.1075 |
+| Experiment 2 | **0.2596** | **0.1370** |
+| Experiment 3 | 0.2576 | 0.1353 |
+| Experiment 4 | 0.2556 | 0.1330 |
+
 Therefore, the final model was selected based on its measured validation performance rather than simply selecting the latest experiment.
 
 The selected model is:
@@ -507,7 +519,7 @@ models/best.pt
 
 ---
 
-## 16. Practical Application
+## 16. Practical Application — Demo
 
 RoadGuard includes a Streamlit web application for demonstrating the trained object detector.
 
@@ -517,7 +529,7 @@ The application is located at:
 scripts/roadguard_demo.py
 ```
 
-The application loads:
+The application loads the trained model from:
 
 ```text
 models/best.pt
@@ -529,7 +541,8 @@ The demo allows a user to:
 2. Run the trained YOLO model.
 3. Detect objects in the image.
 4. Display bounding boxes.
-5. Display the predicted object classes and confidence values.
+5. Display predicted object classes.
+6. Display confidence scores.
 
 ---
 
@@ -577,7 +590,7 @@ To evaluate the final model:
 python scripts/evaluate_model.py
 ```
 
-The evaluation script loads the final model from:
+The evaluation script loads:
 
 ```text
 models/best.pt
@@ -669,23 +682,43 @@ streamlit run scripts/roadguard_demo.py
 
 ## 20. Reports and Figures
 
-The project report materials are organized under:
+All project documentation and supporting analysis are organized under:
 
 ```text
 reports/
 ├── metrics/
-└── figures/
+├── figures/
+└── RoadGuard_Final_Report.pdf
 ```
 
-The `metrics` directory contains numerical results used in the analysis.
+### Metrics
 
-The `figures` directory contains selected visualizations used to demonstrate dataset characteristics and model performance.
+The `reports/metrics/` directory contains the numerical evaluation results and experiment comparisons.
+
+### Figures
+
+The `reports/figures/` directory contains selected figures generated during the project, including:
+
+- Dataset visualizations
+- Training results
+- Confusion matrices
+- Normalized confusion matrix
+- Object-size analysis
+- Model prediction examples
+
+### Final Report
+
+The complete academic/project report is available directly in the repository:
+
+**[📄 RoadGuard Final Report](reports/RoadGuard_Final_Report.md)**
+
+The report provides the complete documentation of the project, including the methodology, dataset preparation, model development, experiments, evaluation, optimization analysis, limitations, and conclusions.
 
 ---
 
 ## 21. Technologies
 
-The project uses the following technologies:
+The project uses:
 
 - **Python 3.11**
 - **Ultralytics YOLO26n**
@@ -701,7 +734,7 @@ The project uses the following technologies:
 
 ## 22. Limitations
 
-The current RoadGuard model has several limitations.
+The current RoadGuard model has several limitations:
 
 - Training was performed using CPU-only hardware.
 - Only 5,000 training images and 1,000 validation images were used.
@@ -709,30 +742,51 @@ The current RoadGuard model has several limitations.
 - Traffic lights and traffic signs can occasionally be missed or confused.
 - Some object classes have relatively few examples.
 - The `train` class has very limited representation in the validation set.
-- The lightweight model provides limited capacity compared with larger object-detection architectures.
+- The lightweight YOLO26n architecture has limited capacity compared with larger object-detection models.
 
 The results indicate that additional improvements could potentially be achieved through a larger training subset, higher input resolution, additional data augmentation, more extensive hyperparameter tuning, or a larger detection architecture.
 
 ---
 
-## 23. Final Model
+## 23. Future Improvements
 
-The final trained RoadGuard model is included in the repository at:
+Potential future improvements include:
 
-```text
-models/best.pt
-```
+- Training on a larger portion of BDD100K.
+- Increasing input image resolution.
+- Improving data augmentation.
+- Addressing class imbalance.
+- Testing larger YOLO architectures.
+- Performing broader hyperparameter optimization.
+- Applying techniques specifically designed for small-object detection.
+- Evaluating the model on an independent test dataset.
+- Improving traffic-light and traffic-sign detection.
 
-The `runs/` directory contains the completed training and evaluation outputs, while the `models/` directory contains the final model intended for practical use.
+---
 
-The final model can be evaluated with:
+## 24. AI Tool Usage
 
-```bash
-python scripts/evaluate_model.py
-```
+AI tools, including ChatGPT, were used as supporting tools during development for planning, debugging, code organization, documentation, and interpretation of Machine Learning results.
 
-and demonstrated through:
+Generated suggestions were independently verified by running the project code, validating the dataset, inspecting model predictions, and evaluating the trained models using the project's evaluation scripts.
 
-```bash
-streamlit run scripts/roadguard_demo.py
-```
+The final technical decisions were based on the observed dataset characteristics, experimental results, and available hardware rather than relying solely on AI-generated recommendations.
+
+---
+
+## 25. Conclusion
+
+RoadGuard provides a complete end-to-end Computer Vision object detection pipeline, covering dataset preparation, validation, model training, experimental comparison, evaluation, optimization analysis, and practical demonstration.
+
+The final selected model achieved:
+
+- **Precision:** 0.5364
+- **Recall:** 0.2539
+- **mAP50:** 0.2596
+- **mAP50-95:** 0.1370
+
+on the 1,000-image validation dataset.
+
+The project demonstrates the capabilities and limitations of lightweight object detection under CPU-only resource constraints and provides a functional demonstration application for testing the trained model on road-scene images.
+
+For the complete methodology, experiments, evaluation, analysis, and conclusions, see the **[RoadGuard Final Report](reports/RoadGuard_Final_Report.md)**.
