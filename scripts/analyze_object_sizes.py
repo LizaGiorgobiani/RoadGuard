@@ -24,7 +24,7 @@ LABEL_DIR = (
 )
 
 
-# YOLO class IDs from data.yaml
+#YOLO class IDs from data.yaml
 CLASS_NAMES = {
     0: "person",
     1: "rider",

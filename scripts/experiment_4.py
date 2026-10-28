@@ -40,31 +40,16 @@ def main():
 
     model.train(
         data=str(DATASET_YAML),
-
-        # Keep resolution consistent with Experiment 2.
         imgsz=416,
         batch=4,
-
-        # Final training experiment.
         epochs=10,
         patience=5,
-
-        # CPU settings.
         device="cpu",
         workers=0,
         cache=False,
-
-        # Augmentation changes.
-        # Less mosaic: fewer four-image composites.
         mosaic=0.5,
-
-        # More conservative random scaling.
         scale=0.3,
-
-        # Disable mosaic in the final 3 epochs.
         close_mosaic=3,
-
-        # Reproducibility and output.
         seed=42,
         plots=True,
         project=str(PROJECT_ROOT / "runs"),

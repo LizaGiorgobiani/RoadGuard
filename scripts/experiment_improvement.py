@@ -44,19 +44,13 @@ def main():
 
         # Experiment 3 variable
         imgsz=640,
-
-        # Smaller batch because 640x640 requires more memory
         batch=2,
-
         epochs=10,
-
         device="cpu",
         workers=0,
         cache=False,
-
         seed=42,
         plots=True,
-
         project=str(PROJECT_ROOT / "runs"),
         name="roadguard_experiment_3",
     )

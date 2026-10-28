@@ -61,7 +61,7 @@ def build_image_index(archive, split):
 
         filename = Path(name).name
 
-        # Don't silently choose if filenames are duplicated.
+        #don't silently choose if filenames are duplicated.
         if filename in index:
             raise ValueError(
                 f"Duplicate filename in {split}: {filename}"
