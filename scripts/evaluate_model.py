@@ -14,8 +14,9 @@ DATASET_YAML = (
 BEST_MODEL = (
     PROJECT_ROOT
     / "models"
-    / "roadguard_best.pt"
+    / "best.pt"
 )
+
 
 
 def main():

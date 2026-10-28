@@ -35,7 +35,8 @@ def main():
     # model = YOLO("yolo26n.pt")
     model = YOLO(str(LAST_CHECKPOINT))
 
-    #CPU-friendly baseline experiment - not good 5 epochs was nto enough
+    #first model - not good 5 epochs was nto enough
+
     """model.train(
         data=str(DATASET_YAML),
         epochs=5,
@@ -51,6 +52,7 @@ def main():
         name="roadguard_cpu_baseline",
     ) """
 
+    #second model
     """ model.train(
         data=str(DATASET_YAML),
         epochs=50,
@@ -71,7 +73,7 @@ def main():
         
     )"""
 
-    #leptopi gametisha da amitom ase vagrdzeleb treinings
+    #training was stopped due to unseen circumstances so the training needs to be continued this way
     model.train(resume=True)
 
 if __name__ == "__main__":

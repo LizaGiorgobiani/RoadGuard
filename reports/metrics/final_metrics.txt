@@ -1,0 +1,21 @@
+============================================================
+ROADGUARD: EVALUATION RESULTS
+============================================================
+Precision:  0.5364
+Recall:     0.2539
+mAP50:      0.2596
+mAP50-95:   0.1370
+
+Per-class mAP50:
+  person               0.3039
+  rider                0.2383
+  bike                 0.1313
+  motor                0.1701
+  car                  0.5810
+  truck                0.3518
+  bus                  0.2988
+  train                0.0000
+  traffic light        0.2445
+  traffic sign         0.2761
+
+Evaluation complete.
